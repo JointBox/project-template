@@ -1,0 +1,16 @@
+_gen_*
+generated/
+secrets.yaml
+secrets.yml
+
+build
+.pio
+
+tmp
+venv
+.venv
+virtualenv
+
+*.pyc
+
+.idea/

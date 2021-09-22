@@ -1,0 +1,36 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+
+ENV_FILE="jointbox.env"
+DOCKER_REPO="ghcr.io/jointbox/jointbox"
+
+RED="\033[0;31m"
+YELLOW="\033[1;33m"
+NC="\033[0m" # No Color
+
+if [ -f $ENV_FILE ]
+then
+  set -o allexport
+  source $ENV_FILE
+  set +o allexport
+  DOCKER_TAG="$JOINTBOX_VERSION-eh$ESPHOME_VERSION"
+else
+  echo "$ENV_FILE is not found. Using defaults"
+  USB_DEVICE="/dev/ttyUSB0"
+  DOCKER_TAG="latest"
+  echo ""
+  printf "${YELLOW}WARNING: Docker image \"$DOCKER_TAG\" will be used by default. It is highly recommended to set version implicitly in $ENV_FILE file.${NC}"
+  echo ""
+fi
+
+
+if [ -c "$USB_DEVICE" ]; then
+    echo "Connected USB device detected"
+    USB_DEVICE="--device $USB_DEVICE"
+else
+    USB_DEVICE=""
+fi
+ARGUMENTS=`echo --rm -v "${PWD}":/config -p 6052:6052 $USB_DEVICE -it $DOCKER_REPO:$DOCKER_TAG $@`
+
+docker run $ARGUMENTS

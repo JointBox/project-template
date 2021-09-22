@@ -1,0 +1,27 @@
+repositories:
+  - name: 'jointbox'
+    url: 'github://jointbox/modules'
+    
+packages:
+  jb_unit:
+    source: repo:jointbox/jb-unit.pkg
+    params:
+      identity:
+        hostname: unit-1
+        friendly_name: Unit 1
+        domain_name: '{{ secrets.network_domain }}'
+      log_level: INFO
+      wifi:
+        ssid: '{{ secrets.wifi_ssid }}'
+        password: '{{ secrets.wifi_password }}'
+      ota:
+        enable: true
+        password: '{{ secrets.ota_password }}'
+      api:
+        enable: true
+        api_key: '{{ secrets.hass_api_key }}'
+      enable_spi: false
+      enable_uart: false
+      enable_1wire: false
+      time: sntp
+      timezone: Europe/Kiev

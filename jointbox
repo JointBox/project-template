@@ -31,12 +31,16 @@ if [ -c "$USB_DEVICE" ]; then
 else
   USB_DEVICE=""
 fi
-readonly UID_=$(id -u)
+
+USER_PARAM=""
+if [ $1 = "scaffold" ]; then
+  USER_PARAM="--user=$UID"
+fi
 
 if [ ! -d $PLATFORMIO_DIR ]; then
   mkdir $PLATFORMIO_DIR
 fi
 
-ARGUMENTS=$(echo --user $UID_ --rm -v "$PLATFORMIO_DIR":/.platformio -v "$CONFIG_DIR":/config -p 6052:6052 $USB_DEVICE -it $DOCKER_REPO:$DOCKER_TAG $@)
+ARGUMENTS=$(echo $USER_PARAM --rm -v "$PLATFORMIO_DIR":/.platformio -v "$CONFIG_DIR":/config -p 6052:6052 $USB_DEVICE -it $DOCKER_REPO:$DOCKER_TAG $@)
 
 docker run $ARGUMENTS

@@ -33,14 +33,17 @@ else
 fi
 
 USER_PARAM=""
-if [ $1 = "scaffold" ]; then
+PLATFORMIO_HOME="/root/.platformio"
+if [[ $@ == *"scaffold"* ]]; then
+  # Local user
   USER_PARAM="--user=$UID"
+  PLATFORMIO_HOME="/.platformio"
 fi
 
 if [ ! -d $PLATFORMIO_DIR ]; then
   mkdir $PLATFORMIO_DIR
 fi
 
-ARGUMENTS=$(echo $USER_PARAM --rm -v "$PLATFORMIO_DIR":/.platformio -v "$CONFIG_DIR":/config -p 6052:6052 $USB_DEVICE -it $DOCKER_REPO:$DOCKER_TAG $@)
+ARGUMENTS=$(echo --name=jointbox $USER_PARAM --rm -v "$PLATFORMIO_DIR":$PLATFORMIO_HOME -v "$CONFIG_DIR":/config -p 6052:6052 $USB_DEVICE -it $DOCKER_REPO:$DOCKER_TAG $@)
 
 docker run $ARGUMENTS

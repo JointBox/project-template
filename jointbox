@@ -3,14 +3,15 @@
 cd "$(dirname "$0")"
 
 ENV_FILE="jointbox.env"
+CONFIG_DIR=$PWD
+PLATFORMIO_DIR="$PWD/.platformio"
 DOCKER_REPO="ghcr.io/jointbox/jointbox"
 
 RED="\033[0;31m"
 YELLOW="\033[1;33m"
 NC="\033[0m" # No Color
 
-if [ -f $ENV_FILE ]
-then
+if [ -f $ENV_FILE ]; then
   set -o allexport
   source $ENV_FILE
   set +o allexport
@@ -24,13 +25,18 @@ else
   echo ""
 fi
 
-
 if [ -c "$USB_DEVICE" ]; then
-    echo "Connected USB device detected"
-    USB_DEVICE="--device $USB_DEVICE"
+  echo "Connected USB device detected"
+  USB_DEVICE="--device $USB_DEVICE"
 else
-    USB_DEVICE=""
+  USB_DEVICE=""
 fi
-ARGUMENTS=`echo --rm -v "${PWD}":/config -p 6052:6052 $USB_DEVICE -it $DOCKER_REPO:$DOCKER_TAG $@`
+readonly UID_=$(id -u)
+
+if [ ! -d $PLATFORMIO_DIR ]; then
+  mkdir $PLATFORMIO_DIR
+fi
+
+ARGUMENTS=$(echo --user $UID_ --rm -v "$PLATFORMIO_DIR":/.platformio -v "$CONFIG_DIR":/config -p 6052:6052 $USB_DEVICE -it $DOCKER_REPO:$DOCKER_TAG $@)
 
 docker run $ARGUMENTS

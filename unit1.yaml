@@ -22,6 +22,6 @@ packages:
         api_key: '{{ secrets.hass_api_key }}'
       enable_spi: false
       enable_uart: false
-      enable_1wire: false
+      enable_dallas: false
       time: sntp
       timezone: Europe/Kiev

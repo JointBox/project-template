@@ -2,6 +2,8 @@ _gen_*
 generated/
 secrets.yaml
 secrets.yml
+_gen*.yaml
+_gen*.yml
 
 build
 .pio

@@ -44,6 +44,6 @@ if [ ! -d $PLATFORMIO_DIR ]; then
   mkdir $PLATFORMIO_DIR
 fi
 
-ARGUMENTS=$(echo --name=jointbox $USER_PARAM --rm -v "$PLATFORMIO_DIR":$PLATFORMIO_HOME -v "$CONFIG_DIR":/config -p 6052:6052 $USB_DEVICE -it $DOCKER_REPO:$DOCKER_TAG $@)
+ARGUMENTS=$(echo --name=jointbox $USER_PARAM --net=host --rm -v "$PLATFORMIO_DIR":$PLATFORMIO_HOME -v "$CONFIG_DIR":/config -p 6052:6052 $USB_DEVICE -it $DOCKER_REPO:$DOCKER_TAG $@)
 
 docker run $ARGUMENTS

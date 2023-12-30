@@ -20,6 +20,7 @@ packages:
       api:
         enable: true
         api_key: '{{ secrets.hass_api_key }}'
+        encryption_key: '{{ secrets.encryption_key }}'
       enable_spi: false
       enable_uart: false
       enable_dallas: false
